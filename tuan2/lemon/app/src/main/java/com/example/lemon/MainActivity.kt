@@ -28,30 +28,38 @@ class MainActivity : AppCompatActivity() {
 
         lemonTree.setOnClickListener { selectLemon() }
         lemonImage.setOnClickListener { squeezeLemon() }
-        drinkGlass.setOnClickListener { resetGame() }
+        drinkGlass.setOnClickListener { drinkLemonade() }
     }
 
     private fun selectLemon() {
+        lemonTree.visibility = View.GONE // Ẩn cây chanh
         lemonImage.setImageResource(R.drawable.lemon_squeeze) // Hiển thị quả chanh
         lemonImage.visibility = View.VISIBLE
         instructionText.text = "Keep tapping the lemon to squeeze it"
         requiredSqueeze = Random.nextInt(2, 6) // Số lần nhấn ngẫu nhiên
-        squeezeCount = 0 // Đặt lại đếm
+        squeezeCount = 0 // Đặt lại số lần nhấn
     }
 
     private fun squeezeLemon() {
         squeezeCount++
         if (squeezeCount >= requiredSqueeze) {
             lemonImage.visibility = View.GONE // Ẩn quả chanh
-            drinkGlass.setImageResource(R.drawable.lemon_drink) // Hiển thị cốc chanh đầy
+            drinkGlass.setImageResource(R.drawable.lemon_drink) // Hiển thị cốc chanh đầy nước
             drinkGlass.visibility = View.VISIBLE
             instructionText.text = "Tap the lemonade to drink it"
         }
     }
 
-    private fun resetGame() {
-        drinkGlass.visibility = View.GONE // Ẩn cốc chanh
-        lemonImage.visibility = View.GONE // Ẩn quả chanh
-        instructionText.text = "Tap the lemon tree to select a lemon"
+    private fun drinkLemonade() {
+        if (drinkGlass.drawable.constantState == resources.getDrawable(R.drawable.lemon_drink).constantState) {
+            // Nếu đang là cốc chanh đầy nước, chuyển sang cốc rỗng
+            drinkGlass.setImageResource(R.drawable.lemon_restart) // Hiển thị cốc rỗng
+            instructionText.text = "Tap the empty glass to start again"
+        } else {
+            // Reset lại game
+            drinkGlass.visibility = View.GONE // Ẩn cốc
+            lemonTree.visibility = View.VISIBLE // Hiển thị lại cây chanh
+            instructionText.text = "Tap the lemon tree to select a lemon"
+        }
     }
 }
